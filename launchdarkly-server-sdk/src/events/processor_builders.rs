@@ -20,7 +20,7 @@ use super::processor::{
     EventProcessor, EventProcessorError, EventProcessorImpl, NullEventProcessor,
 };
 use super::sender::EventSender;
-use super::EventsConfiguration;
+use super::{EventsConfiguration, OnEventSenderResultSuccess};
 
 const DEFAULT_FLUSH_POLL_INTERVAL: Duration = Duration::from_secs(5);
 const DEFAULT_EVENT_CAPACITY: usize = 500;
@@ -86,6 +86,7 @@ pub struct EventProcessorBuilder<C> {
     omit_anonymous_contexts: bool,
     compress_events: bool,
     // diagnostic_recording_interval: Duration
+    on_success: OnEventSenderResultSuccess,
 }
 
 impl<C> EventProcessorFactory for EventProcessorBuilder<C>
@@ -155,6 +156,7 @@ where
             all_attributes_private: self.all_attributes_private,
             private_attributes: self.private_attributes.clone(),
             omit_anonymous_contexts: self.omit_anonymous_contexts,
+            on_success: self.on_success.clone(),
         };
 
         let events_processor =
@@ -183,6 +185,7 @@ impl<C> EventProcessorBuilder<C> {
             omit_anonymous_contexts: false,
             connector: None,
             compress_events: false,
+            on_success: Arc::new(|_| ()),
         }
     }
 
@@ -272,6 +275,12 @@ impl<C> EventProcessorBuilder<C> {
     /// feature to reduce egress bandwidth cost.
     pub fn compress_events(&mut self, enabled: bool) -> &mut Self {
         self.compress_events = enabled;
+        self
+    }
+
+    /// Set a callback method to be called when handling an `EventSenderResult` with `success = true`.
+    pub fn on_success(&mut self, on_success: OnEventSenderResultSuccess) -> &mut Self {
+        self.on_success = on_success;
         self
     }
 

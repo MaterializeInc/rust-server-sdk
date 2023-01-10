@@ -121,7 +121,10 @@ impl EventDispatcher {
             loop {
                 select! {
                     recv(event_result_rx) -> result => match result {
-                        Ok(result) if result.success => self.last_known_time = std::cmp::max(result.time_from_server, self.last_known_time),
+                        Ok(result) if result.success => {
+                            (self.events_configuration.on_success)(&result);
+                            self.last_known_time = std::cmp::max(result.time_from_server, self.last_known_time);
+                        },
                         Ok(result) if result.must_shutdown => {
                             self.disabled = true;
                             self.outbox.reset();

@@ -24,9 +24,9 @@ use uuid::Uuid;
 use super::event::OutputEvent;
 
 pub struct EventSenderResult {
-    pub(super) time_from_server: u128,
-    pub(super) success: bool,
-    pub(super) must_shutdown: bool,
+    pub time_from_server: u128,
+    pub success: bool,
+    pub must_shutdown: bool,
 }
 
 pub trait EventSender: Send + Sync {
