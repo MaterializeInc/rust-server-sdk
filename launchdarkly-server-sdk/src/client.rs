@@ -12,7 +12,7 @@ use thiserror::Error;
 use tokio::sync::{broadcast, Semaphore};
 
 use super::config::Config;
-use super::data_source::DataSource;
+use super::data_source::{DataSource, EventReceived};
 use super::data_source_builders::BuildError as DataSourceError;
 use super::evaluation::{FlagDetail, FlagDetailConfig};
 use super::stores::store::DataStore;
@@ -220,16 +220,27 @@ impl Client {
         })
     }
 
+    /// Starts a client in the current thread, which must have a default tokio
+    /// runtime. This variant accepts a callback for tracking the time of the
+    /// last processed server event.
+    pub fn start_with_default_executor_and_callback(&self, event_received: EventReceived) {
+        if self.started.load(Ordering::SeqCst) {
+            return;
+        }
+        self.started.store(true, Ordering::SeqCst);
+        self.start_with_default_executor_internal(event_received);
+    }
+
     /// Starts a client in the current thread, which must have a default tokio runtime.
     pub fn start_with_default_executor(&self) {
         if self.started.load(Ordering::SeqCst) {
             return;
         }
         self.started.store(true, Ordering::SeqCst);
-        self.start_with_default_executor_internal();
+        self.start_with_default_executor_internal(Arc::new(move |_ev| {}));
     }
 
-    fn start_with_default_executor_internal(&self) {
+    fn start_with_default_executor_internal(&self, event_received: EventReceived) {
         // These clones are going to move into the closure, we
         // do not want to move or reference `self`, because
         // then lifetimes will get involved.
@@ -249,6 +260,7 @@ impl Client {
                 );
                 notify.add_permits(1);
             }),
+            event_received,
             self.shutdown_broadcast.subscribe(),
         );
     }
@@ -268,7 +280,7 @@ impl Client {
         let _guard = runtime.enter();
         self.runtime.write().replace(runtime);
 
-        self.start_with_default_executor_internal();
+        self.start_with_default_executor_internal(Arc::new(move |_ev| {}));
 
         Ok(true)
     }
