@@ -173,20 +173,19 @@ impl DataSource for StreamingDataSource {
                                 }
                             },
                             Some(Err(e)) => {
-                                error!("error on event stream: {:?}", e);
-
-                                match e {
-                                    es::Error::Eof => {
-                                        continue;
-                                    }
-                                    _ => {
-                                        debug!("unhandled error; break");
-                                        break;
-                                    }
-                                }
+                                error!("error on event stream: {:?}; assuming event stream will reconnect", e);
+                                continue;
                             },
                             None => {
-                                error!("unexpected end of event stream");
+                                // NOTE(benesch): At the time of writing, the underlying event
+                                // source client will never return `None`. Something is seriously
+                                // wrong if we get here, so we loudly error.
+                                //
+                                // We don't attempt to retry, though, as the underlying event source
+                                // client already has retry logic, and we don't want to write that
+                                // retry logic twice. Better to fix the bugs in the underlying
+                                // client's retry logic.
+                                error!("unexpected end of event stream; terminating sync task; launchdarkly sync is now broken!");
                                 break;
                             }
                         };
