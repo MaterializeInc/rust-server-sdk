@@ -2,6 +2,34 @@
 
 All notable changes to the LaunchDarkly Rust server-side SDK will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
+## [2.6.2](https://github.com/launchdarkly/rust-server-sdk/compare/2.6.1...2.6.2) (2025-12-18)
+
+
+### Bug Fixes
+
+* Bump eventsource client from v0.14.0 -&gt; v0.16.0 ([90ddf72](https://github.com/launchdarkly/rust-server-sdk/commit/90ddf721f70ffc8ec2e88333efc52d9ca6dee5cb))
+* Bump MSRV from 1.82 to 1.83 ([90ddf72](https://github.com/launchdarkly/rust-server-sdk/commit/90ddf721f70ffc8ec2e88333efc52d9ca6dee5cb))
+* Update aws-lc-rs from v1.13.3 to 1.14.1 ([#128](https://github.com/launchdarkly/rust-server-sdk/issues/128)) ([1295da6](https://github.com/launchdarkly/rust-server-sdk/commit/1295da6492e03eeae9b8d03d1ac40fe996b7a4a7))
+
+## [2.6.1](https://github.com/launchdarkly/rust-server-sdk/compare/2.6.0...2.6.1) (2025-08-27)
+
+
+### Bug Fixes
+
+* Replace ring usage with aws lc rs for FIPS compliance ([#124](https://github.com/launchdarkly/rust-server-sdk/issues/124)) ([843355e](https://github.com/launchdarkly/rust-server-sdk/commit/843355e591bdb6e70fab81b891854ce647bb0f1e))
+
+## [2.6.0](https://github.com/launchdarkly/rust-server-sdk/compare/2.5.1...2.6.0) (2025-07-08)
+
+
+### Features
+
+* Inline context for custom and migration op events ([#120](https://github.com/launchdarkly/rust-server-sdk/issues/120)) ([7a5da5c](https://github.com/launchdarkly/rust-server-sdk/commit/7a5da5cc8ed898e16a5be8d75bdceeb72712d5d7))
+
+
+### Bug Fixes
+
+* Bump MSRV to 1.82.0 ([#121](https://github.com/launchdarkly/rust-server-sdk/issues/121)) ([e55c176](https://github.com/launchdarkly/rust-server-sdk/commit/e55c1764f502368775d6835637a4e56bdef0f2c1))
+
 ## [2.5.1](https://github.com/launchdarkly/rust-server-sdk/compare/2.5.0...2.5.1) (2025-03-24)
 
 
