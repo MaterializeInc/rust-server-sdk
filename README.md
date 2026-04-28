@@ -1,3 +1,8 @@
+# Archived fork for Materialize - 2026-04-28
+This fork was necessary for some additional custom metrics until the upstream 3.0 release added support for custom transports. https://github.com/MaterializeInc/materialize/pull/36170 removes this fork.
+
+This repo is now archived and will be deleted in the future.
+
 # LaunchDarkly Server-Side SDK for Rust
 
 [![Run CI](https://github.com/launchdarkly/rust-server-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/launchdarkly/rust-server-sdk/actions/workflows/ci.yml)
